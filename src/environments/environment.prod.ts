@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://kasam-api.up.railway.app/api' //FUTURE live URL
+    apiUrl: 'https://saree-manager-backend.onrender.com/api' //FUTURE live URL
   };
