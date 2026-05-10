@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +17,7 @@ export class AskAnythingComponent {
   loading = false;
   chatHistory: {role: string, text: string}[] = [];
 
-  constructor(private billService: BillService) {}
+  constructor(private billService: BillService, private cdr: ChangeDetectorRef) {}
 
   send() {
     if (!this.userQuery.trim()) return;
@@ -31,10 +31,13 @@ export class AskAnythingComponent {
       next: (res) => {
         this.chatHistory.push({ role: 'bot', text: res.response });
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: () => {
         this.chatHistory.push({ role: 'bot', text: 'Sorry, I failed to get an answer.' });
         this.loading = false;
+        this.cdr.detectChanges();
+
       }
     });
   }
