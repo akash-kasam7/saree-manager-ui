@@ -1,0 +1,66 @@
+<div class="dashboard-container p-4">
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="stats-card outstanding border-danger">
+          <small class="text-muted">TOTAL OUTSTANDING</small>
+          <h2 class="text-danger">₹{{totals.outstanding | number:'1.0-0'}}</h2>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="stats-card stock border-primary">
+          <small class="text-muted">STOCK (THIS MONTH)</small>
+          <h2 class="text-primary">₹{{totals.monthStock | number:'1.0-0'}}</h2>
+        </div>
+      </div>
+    </div>
+  
+    <div class="d-flex justify-content-between mb-3 align-items-center">
+      <mat-form-field appearance="outline" class="w-50 mb-0">
+        <mat-label>Search Bills</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Manufacturer, Bill No...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      
+      <button mat-raised-button color="primary" (click)="downloadPDF()">
+        <mat-icon>download</mat-icon> PDF Report
+      </button>
+    </div>
+  
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+        
+        <ng-container matColumnDef="billDate"><th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th><td mat-cell *matCellDef="let b">{{b.billDate}}</td></ng-container>
+        <ng-container matColumnDef="billNo"><th mat-header-cell *matHeaderCellDef mat-sort-header>Bill #</th><td mat-cell *matCellDef="let b"><strong>{{b.billNo}}</strong></td></ng-container>
+        <ng-container matColumnDef="manufacturerName"><th mat-header-cell *matHeaderCellDef mat-sort-header>Manufacturer</th><td mat-cell *matCellDef="let b">{{b.manufacturerName}}</td></ng-container>
+        <ng-container matColumnDef="amount"><th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th><td mat-cell *matCellDef="let b">₹{{b.amount | number:'1.2-2'}}</td></ng-container>
+        <ng-container matColumnDef="status"><th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th><td mat-cell *matCellDef="let b"><span [class]="'badge ' + b.status">{{b.status}}</span></td></ng-container>
+  
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let b">
+            <button mat-icon-button color="accent" (click)="openPaymentDialog(b)"><mat-icon>payments</mat-icon></button>
+            <button mat-icon-button (click)="sendWhatsApp(b)"><mat-icon>share</mat-icon></button>
+            <button mat-icon-button (click)="(expandedElement = expandedElement === b ? null : b)"><mat-icon>history</mat-icon></button>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let b" [attr.colspan]="columnsToDisplay.length">
+            <div class="detail-row-content" [@detailExpand]="b == expandedElement ? 'expanded' : 'collapsed'">
+              <div class="p-3 bg-light w-100" *ngIf="b.payments?.length">
+                <strong>Transaction Logs:</strong>
+                <div *ngFor="let p of b.payments" class="small mt-1 text-muted">
+                  📅 {{p.paymentDate}} — <strong>₹{{p.amountPaid}}</strong> (Type: {{p.type}}, ID: {{p.transactionId || 'N/A'}})
+                </div>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="element-row"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+    </div>
+  </div>

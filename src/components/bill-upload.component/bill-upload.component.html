@@ -1,0 +1,59 @@
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4">Upload New Bills</h2>
+  
+    <div class="card p-4 mb-4" *ngIf="extractedBills.length === 0">
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Select Bill Image(s)</label>
+        <input class="form-control" type="file" id="formFile" multiple (change)="onFileSelected($event)">
+        <small class="text-muted">You can select multiple files at once.</small>
+      </div>
+      <button class="btn btn-primary" [disabled]="selectedFiles.length === 0 || loading" (click)="upload()">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+        {{ loading ? 'Extracting Details with AI...' : 'Extract Details' }}
+      </button>
+    </div>
+  
+    <div *ngIf="extractedBills.length > 0">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Verify {{extractedBills.length}} Bill(s)</h4>
+        <div class="d-flex gap-2">
+          <button class="btn btn-success" [disabled]="saving" (click)="saveAll()">
+            <span *ngIf="saving" class="spinner-border spinner-border-sm me-2"></span>
+            {{ saving ? 'Saving...' : 'Confirm & Save All to DB' }}
+          </button>
+          <button class="btn btn-outline-danger" [disabled]="saving" (click)="extractedBills = []">Cancel All</button>
+        </div>
+      </div>
+  
+      <div class="card p-4 mb-4 shadow-sm" *ngFor="let bill of extractedBills; let i = index">
+        <h5 class="text-primary border-bottom pb-2">Bill #{{i + 1}}: {{selectedFiles[i].name}}</h5>
+        
+        <div class="row g-3 mt-2">
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-0">Bill Number</label>
+            <input type="text" class="form-control" [(ngModel)]="bill.billNo">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small mb-0">Manufacturer Name</label>
+            <input type="text" class="form-control" [(ngModel)]="bill.manufacturerName">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted small mb-0">Date</label>
+            <input type="text" class="form-control" [(ngModel)]="bill.billDate">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted small mb-0">Amount</label>
+            <input type="number" class="form-control" [(ngModel)]="bill.amount">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted small mb-0">Transport</label>
+            <input type="text" class="form-control" [(ngModel)]="bill.transportName">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label text-muted small mb-0">LR Number</label>
+            <input type="text" class="form-control" [(ngModel)]="bill.lrNumber">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

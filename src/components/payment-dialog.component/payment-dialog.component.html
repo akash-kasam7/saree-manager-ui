@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Record Payment: {{data.manufacturerName}}</h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column; gap: 15px; padding-top: 10px;">
+    <p class="mb-2">Total Bill: <strong>₹{{data.amount}}</strong> | Balance: <strong class="text-danger">₹{{data.amount - (data.paidAmount || 0)}}</strong></p>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Amount Paid</mat-label>
+      <input matInput type="number" [(ngModel)]="payment.amountPaid">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Transaction ID / Notes</mat-label>
+      <input matInput [(ngModel)]="payment.transactionId">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Payment Type</mat-label>
+      <mat-select [(ngModel)]="payment.type">
+        <mat-option value="PARTIAL">Partial Payment</mat-option>
+        <mat-option value="FULL">Full Payment</mat-option>
+        <mat-option value="RETURN">Purchase Return</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="payment">Save Details</button>
+</mat-dialog-actions>

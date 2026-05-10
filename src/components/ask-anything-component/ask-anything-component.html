@@ -1,0 +1,15 @@
+<div class="container mt-4">
+    <h3>Ask Me Anything</h3>
+    <div class="chat-window border p-3 mb-3" style="height: 400px; overflow-y: auto; background: #f9f9f9;">
+      <div *ngFor="let msg of chatHistory" [ngClass]="{'text-end': msg.role === 'user', 'text-start': msg.role === 'bot'}">
+        <p [ngClass]="msg.role === 'user' ? 'bg-primary text-white d-inline-block p-2 rounded' : 'bg-light d-inline-block p-2 rounded border'">
+          {{ msg.text }}
+        </p>
+      </div>
+      <div *ngIf="loading" class="text-muted">Gemini is thinking...</div>
+    </div>
+    <div class="input-group">
+      <input type="text" class="form-control" [(ngModel)]="userQuery" (keyup.enter)="send()" placeholder="e.g. Which manufacturer has the most outstanding?">
+      <button class="btn btn-primary" (click)="send()" [disabled]="loading">Ask</button>
+    </div>
+  </div>

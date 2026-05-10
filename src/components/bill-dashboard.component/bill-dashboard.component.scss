@@ -1,0 +1,24 @@
+.stats-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    border-top: 4px solid;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    h2 { margin: 10px 0 0; font-weight: bold; }
+  }
+  
+  .element-row td { border-bottom-width: 0; }
+  
+  .detail-row-content {
+    overflow: hidden;
+    display: flex;
+  }
+  
+  .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    &.PAID { background: #d4edda; color: #155724; }
+    &.PENDING { background: #fff3cd; color: #856404; }
+    &.PARTIAL { background: #cce5ff; color: #004085; }
+  }
